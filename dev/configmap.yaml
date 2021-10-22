@@ -1,0 +1,168 @@
+hostname: bigbang.dev
+
+flux:
+  interval: 1m
+  rollback:
+    cleanupOnFail: false
+
+istio:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
+    path: "./chart"
+    tag: "1.8.4-bb.2"
+  ingress:
+    key: ""
+    cert: ""
+  values:
+    kiali:
+      dashboard:
+        auth:
+          strategy: "anonymous"
+
+istiooperator:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
+    path: "./chart"
+    tag: "1.8.4-bb.1"
+
+jaeger:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
+    path: "./chart"
+    tag: "2.23.0-bb.1"
+
+kiali:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
+    path: "./chart"
+    tag: "1.32.0-bb.2"
+
+clusterAuditor:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
+    path: "./chart"
+    tag: "0.3.0-bb.1"
+  values:
+    resources:
+      requests:
+        cpu: 100m
+        memory: .5Gi
+      limits: {}
+
+gatekeeper:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
+    path: "./chart"
+    tag: "3.4.0-bb.4"
+  values:
+    replicas: 1
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits: {}
+
+logging:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
+    path: "./chart"
+    tag: "0.1.15-bb.0"
+  values:
+    elasticsearch:
+      master:
+        count: 1
+        persistence:
+          size: 5Gi
+        resources:
+          requests:
+            cpu: .5
+          limits: {}
+      data:
+        count: 1
+        persistence:
+          size: 5Gi
+        resources:
+          requests:
+            cpu: .5
+          limits: {}
+
+eckoperator:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
+    path: "./chart"
+    tag: "1.6.0-bb.0"
+
+fluentbit:
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
+    path: "./chart"
+    tag: "0.15.14-bb.0"
+  values:
+    securityContext:
+      privileged: true
+
+monitoring:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
+    path: "./chart"
+    tag: "11.0.0-bb.24"
+  values:
+    alertmanager:
+      alertmanagerSpec:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits: {}
+    prometheusOperator:
+      resources:
+        requests:
+          cpu: 250m
+          memory: 400Mi
+        limits: {}
+    prometheus:
+      prometheusSpec:
+        resources:
+          requests:
+            cpu: 100m
+            memory: 200Mi
+          limits: {}
+    grafana:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits: {}
+    kubeStateMetrics:
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits: {}
+    nodeExporter:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 30Mi
+        limits: {}
+
+twistlock:
+  enabled: true
+  git:
+    repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
+    path: "./chart"
+    tag: "0.0.6-bb.0"
+
+  values:
+    console:
+      persistence:
+        size: 5Gi
