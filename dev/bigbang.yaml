@@ -13,7 +13,7 @@ spec:
   gitImplementation: libgit2
   url: https://azure-ecosystem.visualstudio.com/Azure%20Gov%20Engineering/_git/dsop-environment
   ref:
-    branch: __CHANGE_ME__
+    branch: env/bpearl
   secretRef:
     name: private-git
 ---
