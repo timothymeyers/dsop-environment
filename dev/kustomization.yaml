@@ -5,6 +5,9 @@ configMapGenerator:
     behavior: merge
     files:
       - values.yaml=configmap.yaml
+
+resources:
+       - apps.yaml
 patchesStrategicMerge:
 ## Enable the line below if a secrets.enc.yaml is created in this directory
 # - secrets.enc.yaml
