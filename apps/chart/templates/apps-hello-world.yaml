@@ -1,0 +1,24 @@
+{{- if .Values.helloworld.enabled }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hello-world
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: hello-world
+  namespace: apps
+spec:
+  chart:
+    spec:
+      chart: ./apps/hello-world/chart
+      sourceRef:
+        kind: GitRepository
+        name: apps-repo
+  install: {}
+  interval: 1m
+  targetNamespace: hello-world
+  values:
+    hostname: {{ .Values.hostname }}
+{{- end }}

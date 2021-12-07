@@ -1,0 +1,31 @@
+{{- if and .Values.istio.enabled -}}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ include "hello-world.fullname" . }}
+  namespace: {{ default .Release.Namespace }}
+  labels:
+    # {{- if .Values.istio.labels }}
+    #   {{ toYaml .Values.istio.labels | indent 4 }}
+    # {{- end }}
+    app.kubernetes.io/component: "hello-world"
+  # {{- if .Values.istio.annotations }}
+  # annotations:
+  #   {{ toYaml .Values.istio.annotations | indent 4 }}
+  # {{- end }}
+spec:
+  gateways:
+  {{- range .Values.istio.gateways }}
+    - {{ . }}
+  {{- end }}
+  hosts:
+  {{- range .Values.istio.hosts }}
+    - {{ tpl . $}}
+  {{- end }}
+  http:
+    - route:
+      - destination:
+          port:
+            number: 80
+          host: {{ include "hello-world.fullname" . }}.{{ default .Release.Namespace }}.svc.cluster.local
+{{- end }}
