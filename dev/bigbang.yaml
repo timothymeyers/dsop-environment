@@ -11,9 +11,9 @@ metadata:
 spec:
   interval: 1m
   gitImplementation: libgit2
-  url: https://azure-ecosystem.visualstudio.com/Azure%20Gov%20Engineering/_git/dsop-environment
+  url: https://github.com/cheruvu1/dsop-environment
   ref:
-    branch: __CHANGE_ME__
+    branch: env/saic
   secretRef:
     name: private-git
 ---
