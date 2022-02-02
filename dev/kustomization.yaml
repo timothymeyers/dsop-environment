@@ -26,3 +26,17 @@ patchesStrategicMerge:
     name: bigbang
   spec:
     interval: 1m
+- |-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app.kubernetes.io/instance: flux-system
+      app.kubernetes.io/part-of: flux
+      app.kubernetes.io/version: v0.13.2
+      control-plane: controller
+    name: source-controller
+    namespace: flux-system
+  spec:
+    replicas: 3
+    
