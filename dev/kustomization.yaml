@@ -27,7 +27,7 @@ patchesStrategicMerge:
   spec:
     interval: 1m
 - |-
-  apiVersion: apps/v1
+  apiVersion: source.toolkit.fluxcd.io/v1beta1
   kind: Deployment
   metadata:
     labels:
@@ -39,4 +39,3 @@ patchesStrategicMerge:
     namespace: flux-system
   spec:
     replicas: 3
-    
