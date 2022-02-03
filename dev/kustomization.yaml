@@ -27,7 +27,7 @@ patchesStrategicMerge:
   spec:
     interval: 1m
 - |-
-  apiVersion: source.toolkit.fluxcd.io/v1beta1
+  apiVersion: apps/v1
   kind: Deployment
   metadata:
     labels:

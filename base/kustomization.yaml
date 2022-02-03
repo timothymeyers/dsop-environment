@@ -20,3 +20,16 @@ patchesStrategicMerge:
       ref:
         $patch: replace
         tag: "1.11.0"
+  - |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app.kubernetes.io/instance: flux-system
+        app.kubernetes.io/part-of: flux
+        app.kubernetes.io/version: v0.13.2
+        control-plane: controller
+      name: source-controller
+      namespace: flux-system
+    spec:
+        replicas: 3
