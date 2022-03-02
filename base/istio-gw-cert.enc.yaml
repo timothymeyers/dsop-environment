@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: wildcard-cert
+    namespace: istio-system
+type: kubernetes.io/tls
+data:
+    tls.crt: ENC[AES256_GCM,data:5219kI2ssNqMOP6qKw==,iv:k8fJcgbsOcOKVEN0fzAm+iarozo7gfkRhMajMlTTbYM=,tag:s/OfUtBhTsPztLgtYBHzTw==,type:str]
+    tls.key: ENC[AES256_GCM,data:PNplpg2QiRS6p9kRlw==,iv:lkSwKajRCsWRi7mPQxYkAoh+PyXKuLv/D+z3e4RWbvE=,tag:DuzlmvRit/fzUVpPfjPrVQ==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2022-03-02T16:55:16Z"
+    mac: ENC[AES256_GCM,data:YzmIRrpUaXoJc37CzoMMJqcoOc9QuieSZUryHPWD3p8Kj0WxNVJbOLKWMK3gsM5kRIpphdQ1g8lwpYaOpCXwrEcRpZ9PSQ7WmltqRqIVbX22kksbnBabmjncO2zUeTyEk9oKaJR2WNxCxN35VMUICG3JkDR8VJBr4nGAtoZnQsY=,iv:QiSUtyOiDKGZnibY4esC7grrt4Uklt9AF0egqTm/tQA=,tag:Tgi6Rbtjy59N8ao8jxdQ/w==,type:str]
+    pgp:
+        - created_at: "2022-03-02T16:55:15Z"
+          enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA/MfR77dm/cVAQ/6A5EHrUnLh83fz1b3Aiw3cxEki6BTpxAVlj5hMWBVkDXI
+            FMEtEZPLNnOvT56veEh7QisFk0cn4O+PpFTa6gjvxr8KPGQIU0/sjz3DtL+qluzp
+            uYgaAqqNS+qyhkkb7vC3n+uelz/UbfbPo0Jh6VP0Pa4ow5w5Ic1HEZv+KRe9mBIW
+            hDv4MWHnkMf5n069q4t9Nh5mfUwyHOqjo+zc8MC9Cb74m/rDQJdVFlG040fMr0hg
+            ExblujBKspXAZ3Lbz8doH71ee5WvMXucKgUOEpGtNJoZtepKLuuO9dfbiZ6YygAg
+            h6egk7RYhRh8jGWtBQIdsYfMS4P6YQbzwKyRV9FM+DGshy4QgrSI4/F329O55WZA
+            VnGFsCVfqZ5CxsGqWbaYwKa18OBWZ8oLrZBGFKyR11XTQSdjwHP7qKt6JzyvWE6+
+            gfq/YkwB0AZFt+UpJNYEIONACerSYipCvksQVctHVdPPDCCu0ExqJOxFoPVOEyKY
+            t3XoU7TxTHKMOaNW5NxR4CimRR3yy+oFdOJ5HFHBbDcTjWooffYn55oGY9DaniY6
+            5uERJ9yuSue2X3+xcyfh59Kfq6DHhAaCodLMZJX3WOrXmzYbAnzTUhxiSJ5ljazV
+            xwDIPHYf0r2rtPL3eU7HAb2LTBAIhgSAAmsVVfpWQPDvKoysxWgdOdT2AIqvBhTS
+            XgH4RY1KDG/nNj4gagJ4gvZrMm3mhahCO/AOlzvGB1d6X0xSb3qJx1QQMoOSMdrs
+            840kir6djI83957pjRgiTtdaqYDCyrvuqPdLBguCwTUQZmQ5X52QKAQCS/sqLj8=
+            =aUup
+            -----END PGP MESSAGE-----
+          fp: 8ED860B8582DFA86CF887B228E9A833FECDB2CEC
+    encrypted_regex: ^(data|stringData)$
+    version: 3.7.1
