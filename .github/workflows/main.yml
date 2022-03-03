@@ -33,6 +33,7 @@ jobs:
         with:
           image: shuffereu/dsopbuilder:latest
           options: -v /home/runner/work/dsop-environment/dsop-environment:/transfer
+          shell: bash
           run: | 
             cp -f /transfer/config.json config/config.json
             
@@ -54,8 +55,6 @@ jobs:
             source ../scripts/fetch-kubeconfig.sh
             ls -la /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig
             cp /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig /transfer
-          # Use a specific shell
-          # shell: # optional, default is sh
           # Registry
           # registry: # optional
           # Username
