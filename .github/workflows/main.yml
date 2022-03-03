@@ -50,7 +50,9 @@ jobs:
             python3 main.py settings list
             yes | python3 main.py rke2 apply --project foo
             cd /PyBuilder/working/dsop_rke2/foo
+            pwd
             source ../scripts/fetch-kubeconfig.sh
+            ls -la /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig
             cp /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig /transfer
           # Use a specific shell
           # shell: # optional, default is sh
