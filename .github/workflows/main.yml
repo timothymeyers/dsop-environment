@@ -32,7 +32,7 @@ jobs:
         uses: addnab/docker-run-action@v3
         with:
           image: shuffereu/dsopbuilder:latest
-          options: -v /home/runner/work/dsop-on-azure/dsop-on-azure:/transfer
+          options: -v /home/runner/work/dsop-environment/dsop-environment:/transfer
           run: | 
             cp -f /transfer/config.json config/config.json
             
@@ -47,6 +47,7 @@ jobs:
 
             python3 main.py settings --help
             python3 main.py settings validate
+            python3 main.py settings list
             yes | python3 main.py rke2 apply --project foo
             cd /PyBuilder/working/dsop_rke2/foo
             source ../scripts/fetch-kubeconfig.sh
