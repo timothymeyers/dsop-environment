@@ -98,10 +98,10 @@ jobs:
         run : |
           echo "Updating bigbang.yaml"
 
-          URL=$(echo $${{ github.repositoryUrl }} | sed -e "s/git:/https:/g" )
+          URL="http://github.com/${{ github.repository }}"
           ESC_URL=$(printf '%s\n' "$URL" | sed -e 's/[\/&]/\\&/g')
 
-          BRANCH=$(echo $${{ github.ref }} | sed -e "s/refs\/heads\///g" ) 
+          BRANCH=$(basename $${{ github.ref }}
           ESC_BRANCH=$(printf '%s\n' "$BRANCH" | sed -e 's/[\/&]/\\&/g')
 
           echo "URL=$ESC_URL"
