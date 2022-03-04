@@ -57,21 +57,22 @@ jobs:
 
       - name: bootstrap local tools
         shell: bash
-        env:
-          HOME: ${{ github.workspace }}
+        #env:
+        #  HOME: ${{ github.workspace }}
         run: |
           chmod +x tools-install/**.sh
+          echo $HOME
 
-          mkdir -p $HOME/.local/bin
-          ls -la $HOME/.local/bin
+          # mkdir -p $HOME/.local/bin
+          # ls -la $HOME/.local/bin
           
-          export PATH=$HOME/.local/bin:$PATH
+          # export PATH=$HOME/.local/bin:$PATH
 
           cd tools-install
           ./base.sh
           ./sops.sh
           ./kustomize.sh
 
-          ls -la $HOME/.local/bin
+          # ls -la $HOME/.local/bin
           echo $PATH
       - run: echo $PATH
