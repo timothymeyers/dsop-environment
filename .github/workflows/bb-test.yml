@@ -70,4 +70,5 @@ jobs:
           ./sops.sh
           ./kustomize.sh
 
+          ls -la $HOME/.local/bin
 
