@@ -19,7 +19,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+      - run: which kubectl
+
       # - name: Setup Python
       #   uses: actions/setup-python@v3.0.0
       
