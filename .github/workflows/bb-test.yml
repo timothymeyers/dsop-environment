@@ -119,6 +119,7 @@ jobs:
           ## check in change
           git config --global user.email "no-reply@github-runner.com"
           git config --global user.name  "GitHub Runner"
+          git add dev/bigbang.yaml
           git commit -m "updated dev/bigbang.yaml"
           git push
 
