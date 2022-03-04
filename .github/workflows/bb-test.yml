@@ -1,4 +1,4 @@
-name: BigBang Test
+name: Big Bang Test
 
 on:
   workflow_dispatch:
@@ -40,7 +40,6 @@ jobs:
           sleep 60
           kubectl version
           
-          kubectl get nodes -A
 
       - name: bootstrap local tools
         shell: bash
