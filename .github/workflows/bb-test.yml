@@ -96,27 +96,7 @@ jobs:
       - name: update dev bigbang.yaml file
         shell: bash
         run : |
-
-          ### URL update
-
-          #URL="http://github.com/${{ github.repository }}"
-          #ESC_URL=$(printf '%s\n' "$URL" | sed -e 's/[\/&]/\\&/g')
-          #echo "URL=$ESC_URL"
-
-          #sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_URL__/${ESC_URL}/g"
-
-          ## Branch update
-
-          #BRANCH=$GITHUB_REF_NAME
-          #ESC_BRANCH=$(printf '%s\n' "$BRANCH" | sed -e 's/[\/&]/\\&/g')
-          #echo "BRANCH=$ESC_BRANCH"
-
-          #sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_BRANCH__/${ESC_BRANCH}/g"
-
           ./helper-scripts/update-bigbang-yaml.sh dev ${{ github.repository }} $GITHUB_REF_NAME
-
-          ## output 
-          cat dev/bigbang.yaml
 
           ## check in change
           git config --global user.email "no-reply@github-runner.com"
@@ -125,3 +105,18 @@ jobs:
           git commit -m "updated dev/bigbang.yaml"
           git push
 
+      - name: modify secrets.sh
+        shell: bash
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+        run : |
+          echo "modify secrets.sh"
+
+          cat << EOF > scripts/secrets.sh
+          export IRON_BANK_USER="${{ secrets.IRON_BANK_USER }}"
+          export IRON_BANK_PAT="${{ secrets.IRON_BANK_PAT }}"
+          export AZDO_USER="timothymeyers"
+          export AZDO_PASSWORD="${{ secrets.GH_PAT }}"
+          export ISTIO_GW_CRT=istio-gw-crt
+          export ISTIO_GW_KEY=istio-gw-key
+          EOF
