@@ -69,7 +69,6 @@ jobs:
 
           cd tools-install
           ./base.sh
-          ./kubectl.sh 1.21.11
           ./sops.sh
           ./kustomize.sh
 
