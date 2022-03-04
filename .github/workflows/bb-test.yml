@@ -53,11 +53,11 @@ jobs:
       - name: bootstrap local tools
         shell: bash
         run: |
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | sudo bash
-          # curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | sudo bash
+          # curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | sudo bash
           # curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | sudo bash
 
-          which sops
+          # which sops
 
       
       
