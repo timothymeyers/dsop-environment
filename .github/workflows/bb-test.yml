@@ -1,6 +1,7 @@
 name: Big Bang Test
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
