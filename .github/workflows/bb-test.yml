@@ -51,22 +51,21 @@ jobs:
           kubectl get pods -A
 
       - uses: actions/checkout@v3
+
+      - name: checkout tools-install repo
+        uses: actions/checkout@v3
         with:
           repository: benc-uk/tools-install
           path: tools-install
 
       - name: bootstrap local tools
         shell: bash
-        #env:
-        #  HOME: ${{ github.workspace }}
         run: |
           chmod +x tools-install/**.sh
           echo $HOME
 
           mkdir -p $HOME/.local/bin
-          ls -la $HOME/.local/bin
-          
-          # export PATH=$HOME/.local/bin:$PATH
+          ls -la $HOME/.local/bin         
 
           cd tools-install
           ./base.sh
@@ -75,4 +74,19 @@ jobs:
 
           # ls -la $HOME/.local/bin
           echo $PATH
-      - run: echo $PATH
+
+      - name: Create ISTIO certs
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+          HOSTNAME: bigbang.dev
+        run: |
+          ## Create Certs
+          
+          ./scripts/create-root-cert.sh
+          ./scripts/create-domain-cert.sh $HOSTNAME
+          ISTIO_GW_CRT=$(cat $HOSTNAME.crt | base64 -w0)
+          ISTIO_GW_KEY=$(cat $HOSTNAME.key | base64 -w0)
+
+          ## Store in AKV
+          az keyvault secret set --name ISTIO_GW_CRT --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT"
+          az keyvault secret set --name ISTIO_GW_KEY --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY"
