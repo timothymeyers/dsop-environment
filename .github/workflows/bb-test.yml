@@ -99,19 +99,21 @@ jobs:
 
           ### URL update
 
-          URL="http://github.com/${{ github.repository }}"
-          ESC_URL=$(printf '%s\n' "$URL" | sed -e 's/[\/&]/\\&/g')
-          echo "URL=$ESC_URL"
+          #URL="http://github.com/${{ github.repository }}"
+          #ESC_URL=$(printf '%s\n' "$URL" | sed -e 's/[\/&]/\\&/g')
+          #echo "URL=$ESC_URL"
 
-          sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_URL__/${ESC_URL}/g"
+          #sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_URL__/${ESC_URL}/g"
 
           ## Branch update
 
-          BRANCH=$GITHUB_REF_NAME
-          ESC_BRANCH=$(printf '%s\n' "$BRANCH" | sed -e 's/[\/&]/\\&/g')
-          echo "BRANCH=$ESC_BRANCH"
+          #BRANCH=$GITHUB_REF_NAME
+          #ESC_BRANCH=$(printf '%s\n' "$BRANCH" | sed -e 's/[\/&]/\\&/g')
+          #echo "BRANCH=$ESC_BRANCH"
 
-          sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_BRANCH__/${ESC_BRANCH}/g"
+          #sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_BRANCH__/${ESC_BRANCH}/g"
+
+          ./helper-scripts/update-bigbang-yaml.sh dev ${{ github.repository }} $GITHUB_REF_NAME
 
           ## output 
           cat dev/bigbang.yaml
