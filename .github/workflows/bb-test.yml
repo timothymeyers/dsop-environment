@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2      
       - name: Deploy RKE2
+        id: deploy_rke2
         run: echo "::set-output name=kvname::dsop-rke2-test-20-3ob"
   
   deploy-bigbang:
