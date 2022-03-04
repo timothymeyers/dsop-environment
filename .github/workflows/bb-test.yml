@@ -74,3 +74,4 @@ jobs:
 
           ls -la $HOME/.local/bin
           echo $PATH
+      - run: echo $PATH
