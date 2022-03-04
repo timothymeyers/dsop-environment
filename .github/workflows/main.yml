@@ -69,6 +69,8 @@ jobs:
             
             # ls -la /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig
             # cp /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig /transfer
+
+
           # Registry
           # registry: # optional
           # Username
@@ -84,9 +86,39 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy-rke2
     steps:
-      
-      - name: Kubernetes toolset
-        uses: stefanprodan/kube-tools@v1.7.1
+      - name: setup local tools
+        shell: bash
+        run: |
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kubectl.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/gpg.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/azure-cli.sh | bash
+
+      - name: Login to Azure US Gov Cloud with CLI
+        uses: azure/login@v1
         with:
-          command: |
-            echo ${{ needs.deploy-rke2.outputs.kvname }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          environment: 'AzureUSGovernment'
+          enable-AzPSSession: false
+
+      - name: set kubeconfig
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+        run: |          
+          FILE=$(realpath rke2.kubeconfig)
+          echo "Fetching kubeconfig from KeyVault $KV_NAME"
+          az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
+
+          ls -la $FILE
+
+          export KUBECONFIG=$FILE
+          env | grep KUBECONFIG
+
+      
+#      - name: Kubernetes toolset
+#        uses: stefanprodan/kube-tools@v1.7.1
+#        with:
+#          command: |
+#            echo ${{ needs.deploy-rke2.outputs.kvname }}
