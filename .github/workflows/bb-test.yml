@@ -61,7 +61,6 @@ jobs:
           chmod +x tools-install/**.sh
           cd tools-install
           ./base.sh
-          ./kubectl.sh 1.20.0
           ./sops.sh
           ./kustomize.sh
 
