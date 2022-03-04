@@ -104,7 +104,8 @@ jobs:
           REPLACE="ref/heads"
           ESC_REPLACE=$(printf '%s\n' "$REPLACE" | sed -e 's/[\/&]/\\&/g')
 
-          BRANCH=$(echo $ {{ github.ref }} | sed -e 's/$REPLACE//g')
+          #BRANCH=$(echo $ {{ github.ref }} | sed -e 's/$REPLACE//g')
+          BRANCH=$GITHUB_REF_NAME
           ESC_BRANCH=$(printf '%s\n' "$BRANCH" | sed -e 's/[\/&]/\\&/g')
 
           echo "URL=$ESC_URL"
