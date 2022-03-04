@@ -131,4 +131,4 @@ jobs:
         run: |
           cd scripts/
           chmod +x deploy.sh
-          sudo ./deploy.sh
+          sudo --preserve-env ./deploy.sh
