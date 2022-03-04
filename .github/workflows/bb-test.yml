@@ -101,7 +101,10 @@ jobs:
           URL="http://github.com/${{ github.repository }}"
           ESC_URL=$(printf '%s\n' "$URL" | sed -e 's/[\/&]/\\&/g')
 
-          BRANCH=$(basename $${{ github.ref }}
+          REPLACE="ref/heads"
+          ESC_REPLACE=$(printf '%s\n' "$REPLACE" | sed -e 's/[\/&]/\\&/g')
+
+          BRANCH=$(echo $ {{ github.ref }} | sed -e 's/$REPLACE//g')
           ESC_BRANCH=$(printf '%s\n' "$BRANCH" | sed -e 's/[\/&]/\\&/g')
 
           echo "URL=$ESC_URL"
