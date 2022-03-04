@@ -91,6 +91,9 @@ jobs:
 
           export KUBECONFIG=$FILE
           env | grep KUBECONFIG
+          sleep 60
+          kubectl version
+          
           kubectl get nodes -A
 
       - name: bootstrap local tools
