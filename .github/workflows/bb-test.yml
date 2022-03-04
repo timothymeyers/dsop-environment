@@ -63,8 +63,8 @@ jobs:
           chmod +x tools-install/**.sh
           echo $HOME
 
-          # mkdir -p $HOME/.local/bin
-          # ls -la $HOME/.local/bin
+          mkdir -p $HOME/.local/bin
+          ls -la $HOME/.local/bin
           
           # export PATH=$HOME/.local/bin:$PATH
 
