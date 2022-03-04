@@ -63,6 +63,7 @@ jobs:
           chmod +x tools-install/**.sh
 
           mkdir -p $HOME/.local/bin
+          ls -la $HOME/.local/bin
 
           cd tools-install
           ./base.sh
