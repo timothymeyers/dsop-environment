@@ -50,15 +50,17 @@ jobs:
           kubectl get nodes -A
           kubectl get pods -A
 
+      - uses: actions/checkout@v3
+        with:
+          repository: https://github.com/benc-uk/tools-install
+          path: tools-install
+
       - name: bootstrap local tools
         shell: bash
         run: |
-          # curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | bash
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | sudo bash
-          # curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | sudo bash
-
-          # which sops
-
+          chmod +x tools-install/**.sh
+          cd tools-install
+          ./base.sh
       
       
 #      - name: Kubernetes toolset
