@@ -21,7 +21,6 @@ jobs:
     needs: deploy-rke2
     env:
       KUBECONFIG: rke2.kubeconfig
-      PATH: ${{ github.workspace }}/.local/bin:${PATH}
     steps:
       - name: Login to Azure US Gov Cloud with CLI
         uses: azure/login@v1
@@ -66,6 +65,8 @@ jobs:
           mkdir -p $HOME/.local/bin
           ls -la $HOME/.local/bin
           
+          export PATH=$HOME/.local/bin:$PATH
+
           cd tools-install
           ./base.sh
           ./sops.sh
