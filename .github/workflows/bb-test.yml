@@ -57,8 +57,14 @@ jobs:
 
       - name: bootstrap local tools
         shell: bash
+        env:
+          HOME: $GITHUB_WORKSPACE
         run: |
           chmod +x tools-install/**.sh
+
+          echo $HOME
+          mkdir -p $HOME/.local/bin
+
           cd tools-install
           ./base.sh
           ./sops.sh
