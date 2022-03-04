@@ -1,0 +1,63 @@
+name: Deploy RKE2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-rke2:
+    runs-on: ubuntu-latest
+    outputs:
+      kvname: ${{ steps.deploy_rke2.outputs.kvname }}
+
+    steps:
+      - uses: actions/checkout@v2      
+      - name: Deploy RKE2
+        run: echo "::set-output name=kvname::dsop-rke2-test-20-3ob"
+  
+  deploy-bigbang:
+    runs-on: ubuntu-latest
+    needs: deploy-rke2
+    steps:
+      - name: Login to Azure US Gov Cloud with CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          environment: 'AzureUSGovernment'
+          enable-AzPSSession: false
+
+      - name: set kubeconfig
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+        run: |          
+          FILE=$(realpath rke2.kubeconfig)
+          echo "Fetching kubeconfig from KeyVault $KV_NAME"
+          az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
+
+          ls -la $FILE
+
+          export KUBECONFIG=$FILE
+          env | grep KUBECONFIG
+          sleep 60
+          kubectl version
+          
+          kubectl get nodes -A
+
+      - name: bootstrap local tools
+        shell: bash
+        run: |
+          export KUBECONFIG=/home/runner/work/dsop-environment/dsop-environment/rke2.kubeconfig
+          kubectl get nodes -A
+
+
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | bash
+
+
+      
+      
+#      - name: Kubernetes toolset
+#        uses: stefanprodan/kube-tools@v1.7.1
+#        with:
+#          command: |
+#            echo ${{ needs.deploy-rke2.outputs.kvname }}
