@@ -64,6 +64,8 @@ jobs:
 
           mkdir -p $HOME/.local/bin
           ls -la $HOME/.local/bin
+          
+          export PATH=$HOME/.local/bin:$PATH
 
           cd tools-install
           ./base.sh
