@@ -132,4 +132,4 @@ jobs:
 
           cd scripts/
           chmod +x deploy.sh
-          ./deploy.sh
+          yes | ./deploy.sh
