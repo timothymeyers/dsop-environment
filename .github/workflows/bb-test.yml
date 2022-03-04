@@ -87,6 +87,8 @@ jobs:
           ISTIO_GW_CRT=$(cat $HOSTNAME.crt | base64 -w0)
           ISTIO_GW_KEY=$(cat $HOSTNAME.key | base64 -w0)
 
+          ## TODO: What to do with ca.crt and ca.key
+
           ## Store in AKV as secrets
-          az keyvault secret set --name ISTIO_GW_CRT --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT"
-          az keyvault secret set --name ISTIO_GW_KEY --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY"
+          az keyvault secret set --name istio_gw_crt --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT"
+          az keyvault secret set --name istio_gw_key --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY"
