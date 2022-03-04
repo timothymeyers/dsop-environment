@@ -71,4 +71,4 @@ jobs:
           ./kustomize.sh
 
           ls -la $HOME/.local/bin
-
+          echo $PATH
