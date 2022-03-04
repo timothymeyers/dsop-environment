@@ -81,7 +81,7 @@ jobs:
           HOSTNAME: bigbang.dev
         run: |
           ## Create Certs
-          ls -la
+          ls -la scripts
           sudo ./scripts/create-root-cert.sh
           sudo ./scripts/create-domain-cert.sh $HOSTNAME
           ISTIO_GW_CRT=$(cat $HOSTNAME.crt | base64 -w0)
