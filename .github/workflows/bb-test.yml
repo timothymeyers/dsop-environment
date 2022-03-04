@@ -120,3 +120,15 @@ jobs:
           export ISTIO_GW_CRT=istio-gw-crt
           export ISTIO_GW_KEY=istio-gw-key
           EOF
+          chmod +x scripts/secrets.sh
+        
+      - name: prepare deploy-vars.sh
+        shell: bash
+        run: cp scripts/deploy-vars.sh.sample scripts/deploy-vars.sh && chmod +x scripts/deploy-vars.sh
+
+      - name: deploy big bang
+        shell: bash
+        run: |
+          cd scripts/
+          chmod +x deploy.sh
+          sudo ./deploy.sh
