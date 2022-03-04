@@ -54,9 +54,10 @@ jobs:
         shell: bash
         run: |
           curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | sudo bash
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | sudo bash
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | sudo bash
+          # curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | sudo bash
+          # curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | sudo bash
 
+          which sops
 
       
       
