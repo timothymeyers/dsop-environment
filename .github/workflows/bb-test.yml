@@ -127,6 +127,9 @@ jobs:
       - name: deploy big bang
         shell: bash
         run: |
+          kubectl version
+          kubectl get nodes -A
+
           cd scripts/
           chmod +x deploy.sh
           ./deploy.sh
