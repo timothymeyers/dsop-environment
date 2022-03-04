@@ -61,10 +61,8 @@ jobs:
           chmod +x tools-install/**.sh
           cd tools-install
           ./base.sh
-      
-      
-#      - name: Kubernetes toolset
-#        uses: stefanprodan/kube-tools@v1.7.1
-#        with:
-#          command: |
-#            echo ${{ needs.deploy-rke2.outputs.kvname }}
+          ./kubectl.sh 1.20.0
+          ./sops.sh
+          ./kustomize.sh
+
+
