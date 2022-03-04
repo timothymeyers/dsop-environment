@@ -1,6 +1,6 @@
 {
     "general": {
-        "cluster_name": "dsop-rke2-test-16",
+        "cluster_name": "dsop-rke2-test-17",
         "cloud": "AzureUSGovernmentCloud",
         "location": "usgovarizona"
     },

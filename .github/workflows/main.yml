@@ -109,16 +109,14 @@ jobs:
       - name: bootstrap local tools
         shell: bash
         run: |
-          # sudo apt-get update && sudo apt-get install -y kubectl
-          # sudo apt-get update && sudo apt-get install -y gnupg
-          # sudo apt-get update && sudo apt-get install -y kubectl
-        
           curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | bash
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kubectl.sh | bash
+          
+          sudo apt-get update && sudo apt-get install -y kubectl
+          
           curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | bash
           curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | bash
 
-          env | grep KUBE
+          env | grep KUBECONFIG
       
 #      - name: Kubernetes toolset
 #        uses: stefanprodan/kube-tools@v1.7.1
