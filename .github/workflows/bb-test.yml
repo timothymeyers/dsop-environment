@@ -30,24 +30,6 @@ jobs:
           environment: 'AzureUSGovernment'
           enable-AzPSSession: false
 
-      - name: set kubeconfig
-        env:
-          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
-        run: |          
-          FILE=$(realpath rke2.kubeconfig)
-          echo "Fetching kubeconfig from KeyVault $KV_NAME"
-          az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
-
-          ls -la $FILE
-          kubectl version
-          #export KUBECONFIG=$FILE
-          
-      - name: get nodes and pods
-        shell: bash
-        run: |
-          kubectl get nodes -A
-          kubectl get pods -A
-
       - uses: actions/checkout@v3
 
       - name: checkout tools-install repo
@@ -123,6 +105,24 @@ jobs:
       - name: prepare deploy-vars.sh
         shell: bash
         run: cp scripts/deploy-vars.sh.sample scripts/deploy-vars.sh && chmod +x scripts/deploy-vars.sh
+
+      - name: set kubeconfig
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+        run: |          
+          FILE=$(realpath rke2.kubeconfig)
+          echo "Fetching kubeconfig from KeyVault $KV_NAME"
+          az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
+
+          ls -la $FILE
+          kubectl version
+          #export KUBECONFIG=$FILE
+          
+      - name: get nodes and pods
+        shell: bash
+        run: |
+          kubectl get nodes -A
+          kubectl get pods -A
 
       - name: deploy big bang
         shell: bash
