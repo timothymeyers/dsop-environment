@@ -91,11 +91,12 @@ jobs:
 
           export KUBECONFIG=$FILE
           env | grep KUBECONFIG
+          kubectl get nodes -A
 
       - name: bootstrap local tools
         shell: bash
         run: |
-          env | grep KUBECONFIG
+          export KUBECONFIG=/home/runner/work/dsop-environment/dsop-environment/rke2.kubeconfig
           kubectl get nodes -A
 
 
