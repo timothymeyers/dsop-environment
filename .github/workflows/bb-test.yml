@@ -75,18 +75,18 @@ jobs:
           # ls -la $HOME/.local/bin
           echo $PATH
 
-      - name: Create ISTIO certs
+      - name: create ISTIO certs
         env:
           KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
           HOSTNAME: bigbang.dev
         run: |
           ## Create Certs
           
-          ./scripts/create-root-cert.sh
-          ./scripts/create-domain-cert.sh $HOSTNAME
+          sudo ./scripts/create-root-cert.sh
+          sudo ./scripts/create-domain-cert.sh $HOSTNAME
           ISTIO_GW_CRT=$(cat $HOSTNAME.crt | base64 -w0)
           ISTIO_GW_KEY=$(cat $HOSTNAME.key | base64 -w0)
 
-          ## Store in AKV
+          ## Store in AKV as secrets
           az keyvault secret set --name ISTIO_GW_CRT --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT"
           az keyvault secret set --name ISTIO_GW_KEY --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY"
