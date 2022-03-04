@@ -98,10 +98,13 @@ jobs:
         run : |
           echo "Updating bigbang.yaml"
 
-          URL=$(echo $${{ github.repositoryUrl }} | sed -e s/git\:/https\:/g )
+          URL=$(echo $${{ github.repositoryUrl }} | sed -e "s/git\:/https\:/g" )
           BRANCH=$(echo $${{ github.ref }} | sed -e "s/refs\/heads\///g" )
 
-          sed -i dev/bigbang.yaml -e s/__CHANGE_ME_REPO_URL__/${URL}/g
-          sed -i dev/bigbang.yaml -e s/__CHANGE_ME_REPO_BRANCH__/${BRANCH}/g
+          echo "URL=$URL"
+          echo "BRANCH=$BRANCH"
+
+          sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_URL__/${URL}/g"
+          sed -i dev/bigbang.yaml -e "s/__CHANGE_ME_REPO_BRANCH__/${BRANCH}/g"
           
           cat dev/bigbang.yaml
