@@ -57,10 +57,11 @@ jobs:
 
       - name: bootstrap local tools
         shell: bash
+        env:
+          HOME: ${{ github.workspace }}
         run: |
           chmod +x tools-install/**.sh
 
-          export HOME=$GITHUB_WORKSPACE
           mkdir -p $HOME/.local/bin
 
           cd tools-install
