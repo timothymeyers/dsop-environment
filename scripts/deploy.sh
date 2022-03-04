@@ -24,7 +24,8 @@ echo -e "\n\e[34m╔════════════════════
 ║   \e[35mBigBang Automated Deployer v0.2 🚀\e[34m   ║
 ╚════════════════════════════════════════╝\e[39m"
 
-kubectl version > /dev/null 2>&1 || { echo -e "💥 Error! kubectl is not pointing at a cluster, configure KUBECONFIG or $HOME/.kube/config"; exit 1; }
+# Commenting out because I think this is blowing up on the wrong warning message
+# kubectl version > /dev/null 2>&1 || { echo -e "💥 Error! kubectl is not pointing at a cluster, configure KUBECONFIG or $HOME/.kube/config"; exit 1; }
 
 echo 
 echo -e "You are connected to Kubenetes: $(kubectl config view | grep 'server:' | sed 's/\s*server://')"
