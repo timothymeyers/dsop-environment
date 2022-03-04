@@ -92,3 +92,16 @@ jobs:
           ## Store in AKV as secrets
           az keyvault secret set --name istio-gw-crt --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT" > /dev/null
           az keyvault secret set --name istio-gw-key --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY" > /dev/null
+
+      - name: update dev bigbang.yaml file
+        shell: bash
+        run : |
+          echo "Updating bigbang.yaml"
+
+          URL=$(echo $${{ github.repositoryUrl }} | sed -e s/git\:/https\:/g )
+          BRANCH=$(echo $${{ github.ref }} | sed -e "s/refs\/heads\///g" )
+
+          sed -i dev/bigbang.yaml -e s/__CHANGE_ME_REPO_URL__/${URL}/g
+          sed -i dev/bigbang.yaml -e s/__CHANGE_ME_REPO_BRANCH__/${BRANCH}/g
+          
+          cat dev/bigbang.yaml
