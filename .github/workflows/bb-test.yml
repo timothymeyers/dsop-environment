@@ -90,5 +90,5 @@ jobs:
           ## TODO: What to do with ca.crt and ca.key
 
           ## Store in AKV as secrets
-          az keyvault secret set --name istio_gw_crt --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT"
-          az keyvault secret set --name istio_gw_key --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY"
+          az keyvault secret set --name istio-gw-crt --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT"
+          az keyvault secret set --name istio-gw-key --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY"
