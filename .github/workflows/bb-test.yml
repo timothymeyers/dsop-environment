@@ -1,7 +1,6 @@
-name: Deploy RKE2
+name: BigBang Test
 
 on:
-  push:
   workflow_dispatch:
 
 jobs:
