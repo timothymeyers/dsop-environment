@@ -44,17 +44,18 @@ jobs:
           #sleep 60
           kubectl version
           
+      - name: get nodes and pods
+        shell: bash
+        run: |
+          kubectl get nodes -A
+          kubectl get pods -A
 
       - name: bootstrap local tools
         shell: bash
         run: |
-          #export KUBECONFIG=/home/runner/work/dsop-environment/dsop-environment/rke2.kubeconfig
-          kubectl get nodes -A
-
-
-          #curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | bash
-          #curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | bash
-          #curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | sudo bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | sudo bash
+          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | sudo bash
 
 
       
