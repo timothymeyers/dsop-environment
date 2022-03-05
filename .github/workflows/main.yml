@@ -56,7 +56,6 @@ jobs:
             # ls -la /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig
             # cp /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig /transfer
 
-
           # Registry
           # registry: # optional
           # Username
@@ -64,13 +63,13 @@ jobs:
           # Password
           # password: # optional
           # Docker Network ID
-          # docker_network: # optional, default is ${{ job.container.network }}
-     
-
-  
+          # docker_network: # optional, default is ${{ job.container.network }}   
   deploy-bigbang:
     runs-on: ubuntu-latest
     needs: deploy-rke2
+    env:
+      #TODO Need to update this
+      KUBECONFIG: /home/runner/work/dsop-environment/dsop-environment/rke2.kubeconfig
     steps:
       - name: Login to Azure US Gov Cloud with CLI
         uses: azure/login@v1
@@ -78,6 +77,82 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           environment: 'AzureUSGovernment'
           enable-AzPSSession: false
+
+      - uses: actions/checkout@v3
+
+      - name: checkout tools-install repo
+        uses: actions/checkout@v3
+        with:
+          repository: benc-uk/tools-install
+          path: tools-install
+
+      - name: bootstrap local tools
+        shell: bash
+        run: |
+          chmod +x tools-install/**.sh
+          echo $HOME
+
+          mkdir -p $HOME/.local/bin
+          ls -la $HOME/.local/bin         
+
+          cd tools-install
+          ./base.sh
+          ./sops.sh
+          ./kustomize.sh
+
+          # ls -la $HOME/.local/bin
+          echo $PATH
+
+      - name: create ISTIO certs
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+          HOSTNAME: bigbang.dev
+        run: |
+          ## Create Certs
+          chmod +x scripts/**.sh
+          ./scripts/create-root-cert.sh
+          ./scripts/create-domain-cert.sh $HOSTNAME
+          ISTIO_GW_CRT=$(cat $HOSTNAME.crt | base64 -w0)
+          ISTIO_GW_KEY=$(cat $HOSTNAME.key | base64 -w0)
+
+          ## TODO: What to do with ca.crt and ca.key
+
+          ## Store in AKV as secrets
+          az keyvault secret set --name istio-gw-crt --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_CRT" > /dev/null
+          az keyvault secret set --name istio-gw-key --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY" > /dev/null
+
+      - name: update dev bigbang.yaml file
+        shell: bash
+        run : |
+          ./helper-scripts/update-bigbang-yaml.sh dev ${{ github.repository }} $GITHUB_REF_NAME
+
+          ## check in change
+          git config --global user.email "no-reply@github-runner.com"
+          git config --global user.name  "GitHub Runner"
+          git add dev/bigbang.yaml
+          git commit -m "updated dev/bigbang.yaml"
+          git push
+
+      - name: modify secrets.sh
+        shell: bash
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+        run : |
+          echo "modify secrets.sh"
+
+          cat << EOF > scripts/secrets.sh
+          export IRON_BANK_USER="${{ secrets.IRON_BANK_USER }}"
+          export IRON_BANK_PAT="${{ secrets.IRON_BANK_PAT }}"
+          export AZDO_USER="timothymeyers"
+          export AZDO_PASSWORD="${{ secrets.GH_PAT }}"
+          export ISTIO_GW_CRT=https://${KV_NAME}.vault.usgovcloudapi.net/secrets/istio-gw-crt
+          export ISTIO_GW_KEY=https://${KV_NAME}.vault.usgovcloudapi.net/secrets/istio-gw-key
+          EOF
+          chmod +x scripts/secrets.sh
+        
+      - name: prepare deploy-vars.sh
+        shell: bash
+        run: cp scripts/deploy-vars.sh.sample scripts/deploy-vars.sh && chmod +x scripts/deploy-vars.sh
 
       - name: set kubeconfig
         env:
@@ -88,30 +163,21 @@ jobs:
           az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
 
           ls -la $FILE
-
-          export KUBECONFIG=$FILE
-          env | grep KUBECONFIG
-          sleep 60
           kubectl version
+          #export KUBECONFIG=$FILE
           
-          kubectl get nodes -A
-
-      - name: bootstrap local tools
+      - name: get nodes and pods
         shell: bash
         run: |
-          export KUBECONFIG=/home/runner/work/dsop-environment/dsop-environment/rke2.kubeconfig
+          kubectl get nodes -A
+          kubectl get pods -A
+
+      - name: deploy big bang
+        shell: bash
+        run: |
+          kubectl version
           kubectl get nodes -A
 
-
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/base.sh | bash
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/sops.sh | bash
-          curl https://raw.githubusercontent.com/benc-uk/tools-install/master/kustomize.sh | bash
-
-
-      
-      
-#      - name: Kubernetes toolset
-#        uses: stefanprodan/kube-tools@v1.7.1
-#        with:
-#          command: |
-#            echo ${{ needs.deploy-rke2.outputs.kvname }}
+          cd scripts/
+          chmod +x deploy.sh
+          yes | ./deploy.sh
