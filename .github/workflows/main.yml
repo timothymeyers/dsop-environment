@@ -154,6 +154,8 @@ jobs:
         shell: bash
         run: cp scripts/deploy-vars.sh.sample scripts/deploy-vars.sh && chmod +x scripts/deploy-vars.sh
 
+      - run: sleep 60
+
       - name: set kubeconfig
         env:
           KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
