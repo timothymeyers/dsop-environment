@@ -1,8 +1,8 @@
 {
     "general": {
-        "cluster_name": "dsop-rke2-test-20",
+        "cluster_name": "dsop-rke2-bb",
         "cloud": "AzureUSGovernmentCloud",
-        "location": "usgovarizona"
+        "location": "usgovvirginia"
     },
     "cluster-size": {
         "server_instance_count": 1,
