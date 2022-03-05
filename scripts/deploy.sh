@@ -137,7 +137,7 @@ kubectl apply -f bigbang.yaml
 popd
 
 echo -e "\n\e[36m###\e[33m 💤 Sleeping for a few seconds...\e[39m"
-sleep 15
+sleep 60
 
 echo -e "\n\e[36m###\e[33m 👀 Verifying gitrepositories & kustomizations\e[39m"
 kubectl get -n $NAMESPACE gitrepositories,kustomizations -A
