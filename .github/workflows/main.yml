@@ -165,8 +165,15 @@ jobs:
           az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
 
           ls -la $FILE
+
+          until kubectl version &> /dev/null
+          do
+            echo "Waiting for k8s server to respond..."
+            sleep 5
+          done
+          
           kubectl version
-          #export KUBECONFIG=$FILE
+          
           
       - name: get nodes and pods
         shell: bash
