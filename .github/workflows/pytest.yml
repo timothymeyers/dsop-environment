@@ -27,7 +27,7 @@ jobs:
 
   verify-reconciliation:
     runs-on: ubuntu-latest
-    needs: deploy-bigbang
+    needs: [deploy-rke2, deploy-bigbang]
     env:
       #TODO Need to update this
       KUBECONFIG: /home/runner/work/dsop-environment/dsop-environment/rke2.kubeconfig
