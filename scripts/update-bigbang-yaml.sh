@@ -5,7 +5,8 @@
 # $2 = github repository
 # $3 = branch name
 
-#echo $1 $2 $3
+## TODO: Need to do some script arg protections
+
 
 ### URL update
 

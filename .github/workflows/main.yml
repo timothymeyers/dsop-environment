@@ -36,15 +36,15 @@ jobs:
             python3 main.py settings --help
             python3 main.py settings validate
             python3 main.py settings list
-            yes | python3 main.py rke2 apply --project foo
-            cd /PyBuilder/working/dsop_rke2/foo
+            yes | python3 main.py rke2 apply --project ${{ github.run_number }}
+            cd /PyBuilder/working/dsop_rke2/${{ github.run_number }}
             
             # source ../scripts/fetch-kubeconfig.sh
             
             DIRECTORY=$(dirname $0)
 
             KV_NAME=${1:-$(terraform output -raw kv_name)}
-            FILE=$(realpath rke2.kubeconfig)
+            # FILE=$(realpath rke2.kubeconfig)
            
             echo "::set-output name=kvname::$KV_NAME"
 
@@ -124,7 +124,7 @@ jobs:
       - name: update dev bigbang.yaml file
         shell: bash
         run : |
-          ./helper-scripts/update-bigbang-yaml.sh dev ${{ github.repository }} $GITHUB_REF_NAME
+          ./scripts/update-bigbang-yaml.sh dev ${{ github.repository }} $GITHUB_REF_NAME
 
           ## check in change
           git config --global user.email "no-reply@github-runner.com"
