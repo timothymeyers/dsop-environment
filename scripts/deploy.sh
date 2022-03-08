@@ -134,7 +134,8 @@ kubectl delete netpol -n flux-system allow-scraping
 echo -e "\n\e[36m###\e[33m 💣 Deploying BigBang!\e[39m"
 pushd $scriptPath/../dev
 kubectl apply -f bigbang.yaml
-popd
+
+exit 0
 
 ## Remove verification step - run Pytest instead
 
