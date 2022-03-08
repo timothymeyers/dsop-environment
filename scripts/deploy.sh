@@ -135,11 +135,6 @@ echo -e "\n\e[36m###\e[33m 💣 Deploying BigBang!\e[39m"
 pushd $scriptPath/../dev
 kubectl apply -f bigbang.yaml
 
-echo $?
-pwd
-
-exit 0
-
 ## Remove verification step - run Pytest instead
 
 # echo -e "\n\e[36m###\e[33m 💤 Sleeping for a few seconds...\e[39m"
