@@ -39,31 +39,12 @@ jobs:
             yes 2> /dev/null | python3 main.py rke2 apply --project ${{ github.run_number }}
             cd /PyBuilder/working/dsop_rke2/${{ github.run_number }}
             
-            # source ../scripts/fetch-kubeconfig.sh
-            
             DIRECTORY=$(dirname $0)
 
             KV_NAME=${1:-$(terraform output -raw kv_name)}
-            # FILE=$(realpath rke2.kubeconfig)
            
             echo "::set-output name=kvname::$KV_NAME"
 
-            # az account show 
-            # echo "Fetching kubeconfig from KeyVault $KV_NAME"
-            # az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
-            
-            
-            # ls -la /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig
-            # cp /PyBuilder/working/dsop_rke2/foo/rke2.kubeconfig /transfer
-
-          # Registry
-          # registry: # optional
-          # Username
-          # username: # optional
-          # Password
-          # password: # optional
-          # Docker Network ID
-          # docker_network: # optional, default is ${{ job.container.network }}   
   deploy-bigbang:
     runs-on: ubuntu-latest
     needs: deploy-rke2
@@ -195,3 +176,53 @@ jobs:
 
           echo $?
           echo "All Done!"
+
+
+  verify-reconciliation:
+    runs-on: ubuntu-latest
+    needs: [deploy-rke2, deploy-bigbang]
+    env:
+      #TODO Need to update this
+      KUBECONFIG: /home/runner/work/dsop-environment/dsop-environment/rke2.kubeconfig
+    steps:
+      - name: Login to Azure US Gov Cloud with CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          environment: 'AzureUSGovernment'
+          enable-AzPSSession: false
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          cache: pip
+      - run: pip install -r requirements.txt      
+      - name: set kubeconfig
+        env:
+          KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
+        run: |          
+          FILE=$(realpath rke2.kubeconfig)
+          echo "Fetching kubeconfig from KeyVault $KV_NAME"
+          az keyvault secret show --name kubeconfig --vault-name $KV_NAME -o json | jq -r '.value' > $FILE
+
+          ls -la $FILE
+
+          until kubectl version &> /dev/null
+          do
+            echo "Waiting for k8s server to respond..."
+            sleep 10
+          done
+          
+          kubectl version
+
+      - name: Execute Pytest
+        run: |
+          
+          until pytest -v tests/ &> /dev/null
+          do
+            echo "Waiting for reconciliation to complete..."
+            kubectl get gitrepositories,ks,hr -A
+            sleep 60
+          done
+
+          pytest -v tests/
