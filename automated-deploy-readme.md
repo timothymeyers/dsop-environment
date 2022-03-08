@@ -13,8 +13,8 @@ az ad sp create-for-rbac --name "<principal name>" --role owner --scopes /subscr
 ```
 
 - `GH_PAT` - GitHub Personal Access Token. See [docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
-- `IRON_BANK_USER` -
-- `IRON_BANK_PAT` -
+- `IRON_BANK_USER` - Iron Bank User name. Get from Iron Bank profile.
+- `IRON_BANK_PAT` - Iron Bank Personal Access Token. Get from Iron Bank profile.
 
 ## Step 2: Create a new branch for your deployment
 
