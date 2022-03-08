@@ -95,7 +95,7 @@ jobs:
           cat << EOF > scripts/secrets.sh
           export IRON_BANK_USER="${{ secrets.IRON_BANK_USER }}"
           export IRON_BANK_PAT="${{ secrets.IRON_BANK_PAT }}"
-          export AZDO_USER="timothymeyers"
+          export AZDO_USER="${{ github.actor }}"
           export AZDO_PASSWORD="${{ secrets.GH_PAT }}"
           export ISTIO_GW_CRT=https://${KV_NAME}.vault.usgovcloudapi.net/secrets/istio-gw-crt
           export ISTIO_GW_KEY=https://${KV_NAME}.vault.usgovcloudapi.net/secrets/istio-gw-key
