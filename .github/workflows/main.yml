@@ -36,7 +36,7 @@ jobs:
             python3 main.py settings --help
             python3 main.py settings validate
             python3 main.py settings list
-            yes | python3 main.py rke2 apply --project ${{ github.run_number }}
+            yes 2> /dev/null | python3 main.py rke2 apply --project ${{ github.run_number }}
             cd /PyBuilder/working/dsop_rke2/${{ github.run_number }}
             
             # source ../scripts/fetch-kubeconfig.sh
@@ -182,4 +182,4 @@ jobs:
 
           cd scripts/
           chmod +x deploy.sh
-          yes | ./deploy.sh
+          yes 2> /dev/null | ./deploy.sh
