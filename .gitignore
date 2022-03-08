@@ -15,4 +15,3 @@ scripts/bigbang
 __pycache__
 
 .DS_Store
-rke2.kube
