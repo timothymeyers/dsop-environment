@@ -189,6 +189,9 @@ jobs:
 
           cd scripts/
           chmod +x deploy.sh
-          yes 2> /dev/null | ./deploy.sh
+          #yes 2> /dev/null | ./deploy.sh
+          
+          ./deploy.sh < <(yes)
+
           echo $?
           echo "All Done!"
