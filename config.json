@@ -1,6 +1,6 @@
 {
     "general": {
-        "cluster_name": "auto-build-01",
+        "cluster_name": "auto-build-02",
         "cloud": "AzureUSGovernmentCloud",
         "location": "usgovvirginia"
     },
