@@ -1,48 +1,67 @@
-# BigBang Environment Template + Deployer
+# Automated RKE2 + Big Bang DSOP deployment to Azure
 
-This repo is a fork of the 'BigBang Customer Template' https://repo1.dso.mil/platform-one/big-bang/customers/template it contains the configuration and artifacts required to deploy BigBang to Kubernetes.
+This repository is a fork of the ['BigBang Customer Template'](https://repo1.dso.mil/platform-one/big-bang/customers/template). 
+It contains the configuration and artifacts required to deploy BigBang to Kubernetes.
 
-This repo also includes a script with a fast automated way to deploy BigBang into a cluster with a single Bash script carrying out most the repetitive tasks.
+This repository is amended to include scripts and configurations to **automate the deployment of RKE2 and BigBang to Azure** to the greatest extent possible.
+This is generally achieved via a GitHub Actions workflow.
+
+Currently, this automated process only supports dev environment deployments.
 
 The original readme from the upstream repo is here [bigbang-readme.md](./bigbang-readme.md)
 
-## Pre-reqs
+## How to use this repository
 
-Due to the way BigBang is designed and the reliance on gitops and flux there are several pre-reqs that can not be automated or scripted
+### Step 0: Pre-requisites
 
-You must already have a Kubernetes cluster and have kubectl configured to connect to it, otherwise you can tell the script to deploy AKS but this is optional.
+First, you will need to clone this repository into your own GitHub organization or account.
 
-### 1. Local Tools
+You will then need to pre-populate several GitHub repository secrets with credentials to Azure, GitHub, and Iron Bank.
 
-Local tools & environment required are:
+#### Required GitHub Repository Secrets
 
-- Bash (Linux / WSL2 / MacOS)
-- kubectl >= 1.21.0
-- gpg (`sudo apt-get install -y gpg`)
-- sops
-- kustomize
-- Azure CLI (Optional: only needed if deploying AKS)
+The following GH repository secrets are required for this to work:
 
-Install scripts for all these can be obtained here https://github.com/benc-uk/tools-install
+- `AZURE_CREDENTIALS` - A Service Principal with Owner role on your target subscription. This can be accomplished using the following command via bash with an authenticated azcli, and copying the output into this Secret. These credentials are used for the deployment of Azure resources and for accessing your RKE2 cluster. More info [here](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli).
 
-### 1. Accounts
+```bash
+az ad sp create-for-rbac --name "<principal name>" --role owner --scopes /subscriptions/<subscription_id> --sdk-auth
+```
 
-- Azure DevOps
-- [Iron Bank Account](https://ironbank.dso.mil/)
+- `GH_PAT` - GitHub Personal Access Token. See [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token).
+- `IRON_BANK_USER` - Iron Bank User name. Get from [Iron Bank](https://ironbank.dso.mil/) profile.
+- `IRON_BANK_PAT` - Iron Bank Personal Access Token. Get from [Iron Bank](https://ironbank.dso.mil/) profile.
 
-### 2. Set Up Git Repo
+### Step 1: Create a new branch for your deployment
 
-This is a set of manual pre-req steps that has to be done, and can't realistically be scripted:
+Create a branch from main to store configuration for your particular environment.
+We recommend using the branch naming convention of `env/<env-name>`.
 
-- Clone this repo to your machine https://azure-ecosystem.visualstudio.com/Azure%20Gov%20Engineering/_git/dsop-environment
-  You can use your personal Azure AD account to do this. Authentication of git with Azure DevOps is outside the scope of this guide, but the [git credential manager](https://docs.microsoft.com/en-us/azure/devops/repos/git/set-up-credential-managers?view=azure-devops) is a common approach.
-- Create a new branch and name it, a suggestion is to place `env/` as a prefix in front of the branch name, e.g. `env/dbowie` , to identify each developer's own environment branch.
-- Push branch back to remote origin so it is tracked, e.g. `git push --set-upstream origin {branch-name}`
-- Create a set of credentials to clone the repo, these will be used by Flux, you can NOT use your Azure AD account or credentials.
-  From [the Azure DevOps page for this repo](https://azure-ecosystem.visualstudio.com/Azure%20Gov%20Engineering/_git/dsop-environment)
-  - Click 'Clone' button again
-  - Click 'Generate Git Credentials' button
-  - Make a note of the username and password generated, they are needed for `secrets.sh`
+### Step 2: Optionally, update `config.json`
+
+Edit `config.json` to meet your deployment needs.
+By default, the `cluster_name` value will be automatically substituted with the `basename` of your branch name (*i.e.*, if your branch is `env/rke2/dsop`, then the cluster_name will be set to `dsop`).
+This field will be used as a prefix for all of the Azure resources deployed by this process.
+
+Commit and push your changes to `config.json` directly to your environment branch.
+
+### Step 3: Sit back and watch it happen
+
+Upon pushing changes to `config.json`, GitHub Actions will start the deployment process.
+Click the Actions tab and watch your deployment take place.
+
+The first two stages (`deploy-rke2` and `deploy-bigbang`) generally take 5-10 minutes depending on the size of your cluster.
+The final stage (`verify-reconcilitation`) is a test step that monitors for the successful deployment of BigBang to your RKE2 cluster.
+It generally takes 15 minutes or less.
+
+## Acknowledgements
+
+This repository leverages [@marlinspike](https://github.com/marlinspike)'s fantastic **[dsopbuilder](https://github.com/marlinspike/dsopbuilder)** image to deploy RKE2.
+
+This repository is actually a fork of a fork. The intermediary upstream is [@cheruvu1](https://github.com/cheruvu1)'s [dsop-environment](https://github.com/cheruvu1/dsop-environment) repository which is responsible for the vast majority of the BigBang deployment automation, including the comprehensive `deploy.sh` script. For now, I am keeping this repsositry downstream for continued development of the automated solutions.
+
+<!-- Old BC content that should be addressed or captured somewhere
+----
 
 ### 3. Generate wildcard certificate for your domain
 
@@ -182,3 +201,5 @@ Remove $HOME/.gnupg:
 ```
 rm -rf $HOME/.gnupg
 ```
+
+-->
