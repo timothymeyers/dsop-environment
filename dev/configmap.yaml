@@ -1,79 +1,88 @@
-hostname: bigbang.dev
+domain: bigbang.dev
 
 flux:
   interval: 1m
   rollback:
     cleanupOnFail: false
 
+addons:
+  sonarqube:
+    enabled: false
+
+  anchore:
+    enabled: false
+
+  gitlab:
+    enabled: false
+
+  argocd:
+    enabled: false
+
+  minioOperator:
+    enabled: false
+
+  minio:
+    enabled: false
+    values:
+      zones:
+        servers: 1
+      volumesPerServer: 1
+
+  mattermostoperator:
+    enabled: false
+
+  mattermost:
+    enabled: false
+
+  nexus:
+    enabled: false
+    # bug in bigbang 1.18.0, remove this in 1.19.0
+    git:
+      tag: "34.1.0-bb.2"
+
+  keycloak:
+    enabled: false
+    ingress:
+      gateway: "public"
+    values:
+      replicas: 1
+      resources:
+        requests:
+          cpu: 10m
+          memory: 16Mi
+        limits: {}
+
 istio:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-controlplane.git
-    path: "./chart"
-    tag: "1.8.4-bb.2"
-  ingress:
-    key: ""
-    cert: ""
-  values:
-    kiali:
-      dashboard:
-        auth:
-          strategy: "anonymous"
 
 istiooperator:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/istio-operator.git
-    path: "./chart"
-    tag: "1.8.4-bb.1"
 
 jaeger:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/jaeger.git
-    path: "./chart"
-    tag: "2.23.0-bb.1"
 
 kiali:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/kiali.git
-    path: "./chart"
-    tag: "1.32.0-bb.2"
 
 clusterAuditor:
-  enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/cluster-auditor.git
-    path: "./chart"
-    tag: "0.3.0-bb.1"
+  enabled: true 
   values:
     resources:
       requests:
         cpu: 100m
         memory: .5Gi
-      limits: {}
 
 gatekeeper:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/policy.git
-    path: "./chart"
-    tag: "3.4.0-bb.4"
   values:
     replicas: 1
     resources:
       requests:
         cpu: 100m
         memory: 256Mi
-      limits: {}
 
 logging:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/elasticsearch-kibana.git
-    path: "./chart"
-    tag: "0.1.15-bb.0"
   values:
     elasticsearch:
       master:
@@ -89,32 +98,20 @@ logging:
         persistence:
           size: 5Gi
         resources:
-          requests:
-            cpu: .5
           limits: {}
+          requests:
+            cpu: 0.1
 
 eckoperator:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/eck-operator.git
-    path: "./chart"
-    tag: "1.6.0-bb.0"
 
 fluentbit:
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/fluentbit.git
-    path: "./chart"
-    tag: "0.15.14-bb.0"
   values:
     securityContext:
       privileged: true
 
 monitoring:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/core/monitoring.git
-    path: "./chart"
-    tag: "11.0.0-bb.24"
   values:
     alertmanager:
       alertmanagerSpec:
@@ -126,8 +123,8 @@ monitoring:
     prometheusOperator:
       resources:
         requests:
-          cpu: 250m
-          memory: 400Mi
+          cpu: 100m
+          memory: 200Mi
         limits: {}
     prometheus:
       prometheusSpec:
@@ -157,11 +154,6 @@ monitoring:
 
 twistlock:
   enabled: true
-  git:
-    repo: https://repo1.dso.mil/platform-one/big-bang/apps/security-tools/twistlock.git
-    path: "./chart"
-    tag: "0.0.6-bb.0"
-
   values:
     console:
       persistence:
