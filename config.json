@@ -1,6 +1,6 @@
 {
     "general": {
-        "cluster_name": "__CHANGEME__CLUSTERNAME",
+        "cluster_name": "__CHANGEME__CLUSTERNAME__",
         "cloud": "AzureUSGovernmentCloud",
         "location": "usgovvirginia"
     },
