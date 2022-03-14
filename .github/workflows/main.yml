@@ -13,7 +13,12 @@ jobs:
       kvname: ${{ steps.deploy_rke2.outputs.kvname }}
 
     steps:
-      - uses: actions/checkout@v2      
+      - uses: actions/checkout@v2
+      - name: Use branch name as cluster name if unchanged
+        run: |
+          CLUSTER=$(basename $GITHUB_REF_NAME)
+          ESC_CLUSTER=$(printf '%s\n' "$CLUSTER" | sed -e 's/[\/&]/\\&/g')
+          sed -i config.json -e "s/__CHANGEME__CLUSTERNAME__/${ESC_CLUSTER}/g"     
       - name: Deploy RKE2
         id: deploy_rke2
         uses: addnab/docker-run-action@v3
