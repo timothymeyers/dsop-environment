@@ -90,6 +90,7 @@ jobs:
           echo $PATH
 
       - name: create ISTIO certs
+        continue-on-error: true
         env:
           KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
           HOSTNAME: bigbang.dev
@@ -108,8 +109,10 @@ jobs:
           az keyvault secret set --name istio-gw-key --vault-name $KV_NAME --encoding base64 --value "$ISTIO_GW_KEY" > /dev/null
 
       - name: update dev bigbang.yaml file
+        continue-on-error: true
         shell: bash
         run : |
+          ./scripts/reset.sh
           ./scripts/update-bigbang-yaml.sh dev ${{ github.repository }} $GITHUB_REF_NAME
 
           ## check in change
@@ -120,7 +123,6 @@ jobs:
           git push
 
       - name: modify secrets.sh
-        if: always()
         shell: bash
         env:
           KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
