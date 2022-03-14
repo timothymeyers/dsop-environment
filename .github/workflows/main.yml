@@ -115,6 +115,7 @@ jobs:
           git push
 
       - name: modify secrets.sh
+        if: always()
         shell: bash
         env:
           KV_NAME: ${{ needs.deploy-rke2.outputs.kvname }}
