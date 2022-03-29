@@ -13,7 +13,7 @@ spec:
   gitImplementation: libgit2
   url: https://github.com/timothymeyers/dsop-environment
   ref:
-    branch: env/bb-19
+    branch: env/bbr-19
   secretRef:
     name: private-git
 ---
