@@ -11,9 +11,9 @@ metadata:
 spec:
   interval: 1m
   gitImplementation: libgit2
-  url: __CHANGE_ME_REPO_URL__
+  url: https://github.com/timothymeyers/dsop-environment
   ref:
-    branch: __CHANGE_ME_REPO_BRANCH__
+    branch: env/bb-19
   secretRef:
     name: private-git
 ---
